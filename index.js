@@ -1,32 +1,26 @@
 const express = require('express');
+const parseBody = require('body-parser');
 
 const app = express();
+
+app.use(parseBody.urlencoded({ extended:true }));
 
 app.get('/', (req, res) => {
     res.send(`
 	    <div>
 	      <form method="POST">
-	        <input name="email" placeholder="email" />
-		<input name="password" placeholder="password" />
-		<input name="confirmPassword" palceholder="confirm password" />
+	        <input type="email" name="email" placeholder="email" />
+		<input type="password" name="password" placeholder="password" />
+		<input type="password" name="confirmPassword" palceholder="confirm password" />
 		<button>Sign Up</button>
 	      </form>
 	    </div>`);
 });
 
 app.post('/', (req, res) => {
-    req.on('data', data => {
-        const parsedData = data.toString('utf8').split('&');
-	const formData = {};
-	    for (let pair of parsedData) {
-		const [key, value] = pair.split('=');
-		formData[key] = value;
-	    }
-        console.log(formData);
-    });
+    console.log(req.body);
     res.send('user added');
 });
-
 
 app.listen(3000, () => {
     console.log('listening');
